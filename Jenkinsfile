@@ -87,6 +87,24 @@ stages{
    } 
  }
 
+ stage("Clean the Docker Local Images"){
+   steps {
+         echo "run docker image prune -a -f command"
+   }
+ }
+
+ 
+stage('Connect to EC2 & Deployon on Minikube ') {
+            steps {
+                     
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP 'echo Connected to EC2'"
+                    sh 'scp -i ${SSH_KEY} -o StrictHostKeyChecking=no deployment.yaml ubuntu@$MINIKUBE_IP:/home/ubuntu/'
+                    sh 'ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl delete -f /home/ubuntu/deployment.yaml --ignore-not-found=true"'
+                    sh 'ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl apply -f /home/ubuntu/deployment.yaml"'
+                  }
+          }
+     }
  
            
 } // end of stages
