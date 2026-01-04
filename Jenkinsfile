@@ -4,7 +4,7 @@ pipeline {
 environment {
    IMAGE_NAME = 'rutuja2223/springrestapi'
    PORT_MAPPING = '8081:7000'
-   DOCKERCREDENTIALS = credentials("dockerhub") // [DOCKERCREDENTIALS_USR, DOCKERCREDENTIALS_PSW] 
+   DOCKERCREDENTIALS = credentials("dockerhub-jenkins") // [DOCKERCREDENTIALS_USR, DOCKERCREDENTIALS_PSW] 
 }
  
 parameters {
